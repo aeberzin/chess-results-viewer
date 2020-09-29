@@ -17,10 +17,9 @@ export default class App extends Vue {
   private pairs: any = [];
 
   created() {
-    fetch("/api/pairs")
+    fetch("http://localhost:3000/api/pairs")
       .then(response => response.json())
       .then(data => {
-        console.log(data);
         this.pairs = data;
       });
   }
@@ -30,6 +29,7 @@ export default class App extends Vue {
 <style lang="scss">
 body {
   margin: 0;
+  font-family: BlinkMacSystemFont, -apple-system, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", "Helvetica", "Arial", sans-serif;
 }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -40,7 +40,6 @@ body {
   width: 100%;
   height: 100vh;
   display: grid;
-  // grid-template-rows: repeat(20, 1fr);
   & > div {
     border: 1px solid black;
     &:nth-child(2n) {

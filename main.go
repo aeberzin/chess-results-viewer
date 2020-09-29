@@ -10,7 +10,11 @@ import (
 	"os"
 	"path"
 	"strings"
-	"time"
+
+	"github.com/gorilla/handlers"
+	"github.com/rs/cors"
+
+	"github.com/gorilla/mux"
 
 	"github.com/aeberzin/chess-results-viewer/api"
 )
@@ -19,20 +23,14 @@ const urlScheme = "http"
 
 func main() {
 	config := loadConfig()
-
-	s := &http.Server{
-		Addr:           config.Port,
-		ReadTimeout:    60 * time.Second,
-		WriteTimeout:   60 * time.Second,
-		MaxHeaderBytes: 1 << 16,
-	}
+	router := mux.NewRouter()
 
 	// Endpoints for the API and Vue client
 	vueHandler := http.FileServer(Vue("web/dist/"))
-	apiHandler := api.NewAPI()
+	apiHandler := api.NewAPI(router.PathPrefix("/api").Subrouter())
 
-	http.Handle("/api/", apiHandler)
-	http.Handle("/", vueHandler)
+	router.Handle("/", vueHandler)
+	router.Handle("/api/", apiHandler)
 
 	go func() {
 		scanner := bufio.NewScanner(os.Stdin)
@@ -46,8 +44,15 @@ func main() {
 		}
 	}()
 
+	c := cors.New(cors.Options{
+		AllowedOrigins:   []string{config.URL, config.DevURL},
+		AllowCredentials: true,
+	})
+
+	handler := c.Handler(router)
+
 	log.Println("Listening on", config.Port, "at", config.URL)
-	log.Fatal(s.ListenAndServe())
+	log.Fatal(http.ListenAndServe(config.Port, handlers.LoggingHandler(os.Stdout, handler)))
 }
 
 type Config struct {

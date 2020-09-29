@@ -15,15 +15,15 @@ type API struct {
 	Tournament *Tournament
 }
 
-func NewAPI() *API {
-	router := mux.NewRouter()
+func NewAPI(subrouter *mux.Router) *API {
+	router := subrouter
 	tournament := NewTournament("535239")
 	api := &API{
 		"",
 		router,
 		tournament,
 	}
-	api.HandleFunc("/api/pairs", api.GetPairs())
+	api.HandleFunc("/pairs", api.GetPairs())
 	return api
 }
 
