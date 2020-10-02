@@ -6,8 +6,6 @@ import (
 	"github.com/PuerkitoBio/goquery"
 )
 
-type indexes map[int]string
-
 type Pair struct {
 	Table   string
 	WName   string
