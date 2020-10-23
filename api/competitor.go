@@ -2,8 +2,6 @@ package api
 
 import (
 	"reflect"
-
-	"github.com/PuerkitoBio/goquery"
 )
 
 type Competitor struct {
@@ -17,41 +15,27 @@ type Competitor struct {
 }
 
 type Competitors struct {
-	Indexes     indexes
-	Competitors []Competitor
+	constructor
 }
 
-func NewCompetitors(node *goquery.Selection) *Competitors {
+func NewCompetitors(table [][]string) *Competitors {
 	var competitors Competitors
-	competitors.Indexes = make(map[int]string)
-	space := string([]byte{194, 160})
-	node.Find("td").Each(func(i int, s *goquery.Selection) {
-		switch text := s.Text(); text {
-		case "Имя":
-			competitors.Indexes[i] = "Name"
-		case "Ст.ном":
-			competitors.Indexes[i] = "Finish"
-		case "Ст.ном.":
-			competitors.Indexes[i] = "Start"
-		case "Очки":
-			competitors.Indexes[i] = "Result"
-		case space + "Доп1" + space:
-			competitors.Indexes[i] = "Rate1"
-		case space + "Доп2" + space:
-			competitors.Indexes[i] = "Rate2"
-		case space + "Доп3" + space:
-			competitors.Indexes[i] = "Rate3"
-		}
-	})
+	competitors.config = map[string]string{
+		"Имя":              "Name",
+		"Ст.ном":           "Finish",
+		"Ст.ном.":          "Start",
+		"Очки":             "Result",
+		withSpaces("Доп1"): "Rate1",
+		withSpaces("Доп2"): "Rate2",
+		withSpaces("Доп3"): "Rate3",
+	}
+	competitors.reflect = reflect.TypeOf(Competitor{})
+	competitors.setIndexes(table[0])
+	competitors.fill(table)
 	return &competitors
 }
 
-func (competitors *Competitors) AddCompetitor(node *goquery.Selection) {
-	var competitor Competitor
-	node.Find("td").Each(func(i int, s *goquery.Selection) {
-		if name, ok := competitors.Indexes[i]; ok {
-			reflect.ValueOf(&competitor).Elem().FieldByName(name).SetString(s.Text())
-		}
-	})
-	competitors.Competitors = append(competitors.Competitors, competitor)
+func withSpaces(s string) string {
+	space := string([]byte{194, 160})
+	return space + s + space
 }

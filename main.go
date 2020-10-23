@@ -11,6 +11,7 @@ import (
 	"path"
 	"strings"
 
+	socketio "github.com/googollee/go-socket.io"
 	"github.com/gorilla/handlers"
 	"github.com/rs/cors"
 
@@ -21,16 +22,42 @@ import (
 
 const urlScheme = "http"
 
+func corsMiddleware(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+		allowHeaders := "Accept, Content-Type, Content-Length, Accept-Encoding, X-CSRF-Token, Authorization"
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "http://localhost:8080")
+		w.Header().Set("Access-Control-Allow-Methods", "POST, PUT, PATCH, GET, DELETE")
+		w.Header().Set("Access-Control-Allow-Headers", "Content-Type, Authorization")
+		w.Header().Set("Access-Control-Allow-Credentials", "true")
+		w.Header().Set("Access-Control-Allow-Headers", allowHeaders)
+
+		next.ServeHTTP(w, r)
+	})
+}
+
 func main() {
 	config := loadConfig()
 	router := mux.NewRouter()
 
+	server, _ := socketio.NewServer(nil)
+	server.OnConnect("/", func(s socketio.Conn) error {
+		s.SetContext("")
+		s.Join("all")
+		fmt.Println("connected:", s.ID())
+		return nil
+	})
+	go server.Serve()
+	defer server.Close()
+
 	// Endpoints for the API and Vue client
 	vueHandler := http.FileServer(Vue("web/dist/"))
-	apiHandler := api.NewAPI(router.PathPrefix("/api").Subrouter())
+	apiHandler := api.NewAPI(router.PathPrefix("/api").Subrouter(), server)
 
 	router.Handle("/", vueHandler)
 	router.Handle("/api/", apiHandler)
+	router.Handle("/socket.io/", corsMiddleware(server))
 
 	go func() {
 		scanner := bufio.NewScanner(os.Stdin)
@@ -45,7 +72,7 @@ func main() {
 	}()
 
 	c := cors.New(cors.Options{
-		AllowedOrigins:   []string{config.URL, config.DevURL},
+		AllowedOrigins:   []string{"*"},
 		AllowCredentials: true,
 	})
 

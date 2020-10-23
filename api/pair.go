@@ -1,9 +1,8 @@
 package api
 
 import (
+	"log"
 	"reflect"
-
-	"github.com/PuerkitoBio/goquery"
 )
 
 type Pair struct {
@@ -18,34 +17,30 @@ type Pair struct {
 }
 
 type Pairs struct {
-	Indexes indexes
-	Pairs   []Pair
+	constructor
 }
 
-func NewPairs(node *goquery.Selection) *Pairs {
+func NewPairs(table [][]string) *Pairs {
 	var pairs Pairs
-	pairs.Indexes = make(map[int]string)
-	color := "W"
-	node.Find("td").Each(func(i int, s *goquery.Selection) {
-		switch text := s.Text(); text {
-		case "Имя":
-			pairs.Indexes[i] = color + "Name"
-		case "Результат":
-			pairs.Indexes[i] = "Result"
-			color = "B"
-		case "Bo.":
-			pairs.Indexes[i] = "Table"
-		}
-	})
+	pairs.reflect = reflect.TypeOf(Pair{})
+	pairs.setIndexes(table[0])
+	pairs.fill(table)
 	return &pairs
 }
 
-func (pairs *Pairs) AddPair(node *goquery.Selection) {
-	var pair Pair
-	node.Find("td").Each(func(i int, s *goquery.Selection) {
-		if name, ok := pairs.Indexes[i]; ok {
-			reflect.ValueOf(&pair).Elem().FieldByName(name).SetString(s.Text())
+func (p *Pairs) setIndexes(row []string) {
+	p.indexes = make(map[int]string)
+	color := "W"
+	for i, v := range row {
+		switch text := v; text {
+		case "Имя":
+			p.indexes[i] = color + "Name"
+		case "Результат":
+			p.indexes[i] = "Result"
+			color = "B"
+		case "Bo.":
+			p.indexes[i] = "Table"
 		}
-	})
-	pairs.Pairs = append(pairs.Pairs, pair)
+	}
+	log.Println(p.indexes)
 }
