@@ -1,18 +1,16 @@
 <template>
-    <table class="competitors">
-      <thead>
-        <tr>
-          <th v-for="(field, i) in fields" :key="i">
-            {{ field.title }}
-          </th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="(competitor, i) in competitors" :key="i">
-          <td v-for="(field, j) in fields" :key="'pair' + j"> {{ competitor[field.name]}} </td>
-        </tr>
-      </tbody>
-    </table>
+  <table class="competitors">
+    <thead>
+      <tr>
+        <th v-for="(field, i) in fields" :key="i">{{ field.title }}</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr v-for="(competitor, i) in competitors" :key="i">
+        <td v-for="(field, j) in fields" :key="'pair' + j">{{ competitor[field.name]}}</td>
+      </tr>
+    </tbody>
+  </table>
 </template>
 
 <script lang="ts">
@@ -20,21 +18,21 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 
 @Component
 export default class Competitors extends Vue {
-    @Prop() private competitors: any;
-    private fields: any = [
-        {
-        name: "Finish",
-        title: "Место"
-        },
-        {
-        name: "Start",
-        title: "№"
-        },
-        {
-        name: "Name",
-        title: "Игрок"
-        }
-    ];
+  @Prop() private competitors: any;
+  private fields: any = [
+    {
+      name: "Finish",
+      title: "Место"
+    },
+    {
+      name: "Start",
+      title: "№"
+    },
+    {
+      name: "Name",
+      title: "Игрок"
+    }
+  ];
 }
 </script>
 
@@ -42,7 +40,7 @@ export default class Competitors extends Vue {
 .competitors {
   width: 100%;
   display: grid;
-  grid-template-columns: 
+  grid-template-columns:
     minmax(70px, 70px)
     minmax(70px, 70px)
     minmax(150px, 6fr);
