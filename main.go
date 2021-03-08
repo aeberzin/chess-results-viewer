@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"path/filepath"
 	"strings"
 
 	socketio "github.com/googollee/go-socket.io"
@@ -21,6 +22,41 @@ import (
 )
 
 const urlScheme = "http"
+
+type spaHandler struct {
+	staticPath string
+	indexPath  string
+}
+
+func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
+	// get the absolute path to prevent directory traversal
+	path, err := filepath.Abs(r.URL.Path)
+	if err != nil {
+		// if we failed to get the absolute path respond with a 400 bad request
+		// and stop
+		http.Error(w, err.Error(), http.StatusBadRequest)
+		return
+	}
+
+	// prepend the path with the path to the static directory
+	path = filepath.Join(h.staticPath, path)
+
+	// check whether a file exists at the given path
+	_, err = os.Stat(path)
+	if os.IsNotExist(err) {
+		// file does not exist, serve index.html
+		http.ServeFile(w, r, filepath.Join(h.staticPath, h.indexPath))
+		return
+	} else if err != nil {
+		// if we got an error (that wasn't that the file doesn't exist) stating the
+		// file, return a 500 internal server error and stop
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	// otherwise, use http.FileServer to serve the static dir
+	http.FileServer(http.Dir(h.staticPath)).ServeHTTP(w, r)
+}
 
 func corsMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -52,12 +88,15 @@ func main() {
 	defer server.Close()
 
 	// Endpoints for the API and Vue client
-	vueHandler := http.FileServer(Vue("web/dist/"))
+	// vueHandler := http.FileServer(Vue("web/dist/"))
 	apiHandler := api.NewAPI(router.PathPrefix("/api").Subrouter(), server)
 
-	router.Handle("/", vueHandler)
+	spa := spaHandler{staticPath: "web/dist", indexPath: "web/dist/index.html"}
+	// router.Handle("/", vueHandler)
 	router.Handle("/api/", apiHandler)
 	router.Handle("/socket.io/", corsMiddleware(server))
+	// router.PathPrefix("/dist").Handler(http.FileServer(http.Dir("web/dist/")))
+	router.PathPrefix("/").Handler(spa)
 
 	go func() {
 		scanner := bufio.NewScanner(os.Stdin)
@@ -133,4 +172,12 @@ func (v Vue) Open(name string) (http.File, error) {
 	}
 	fmt.Println(name)
 	return http.Dir(v).Open(name)
+}
+
+func IndexHandler(entrypoint string) func(w http.ResponseWriter, r *http.Request) {
+	fn := func(w http.ResponseWriter, r *http.Request) {
+		http.ServeFile(w, r, entrypoint)
+	}
+
+	return http.HandlerFunc(fn)
 }
