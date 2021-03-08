@@ -1,1 +1,1 @@
-import './axios';
+import '@/plugins/axios';

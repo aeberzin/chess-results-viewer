@@ -78,8 +78,13 @@ func main() {
 
 	handler := c.Handler(router)
 
-	log.Println("Listening on", os.Getenv("PORT"), "at", config.URL)
-	log.Fatal(http.ListenAndServe(":" + os.Getenv("PORT"), handlers.LoggingHandler(os.Stdout, handler)))
+	port := os.Getenv("PORT")
+	if len(port) == 0 {
+		port = "3000"
+	}
+
+	log.Println("Listening on", port, "at", config.URL)
+	log.Fatal(http.ListenAndServe(":"+port, handlers.LoggingHandler(os.Stdout, handler)))
 }
 
 type Config struct {
@@ -126,5 +131,6 @@ func (v Vue) Open(name string) (http.File, error) {
 	if ext := path.Ext(name); name != "/" && (ext == "" || ext == ".html") {
 		name = "index.html"
 	}
+	fmt.Println(name)
 	return http.Dir(v).Open(name)
 }
