@@ -89,9 +89,9 @@ func main() {
 	apiHandler := api.NewAPI(router.PathPrefix("/api").Subrouter(), server)
 
 	spa := spaHandler{staticPath: "web/dist", indexPath: "/index.html"}
+	router.PathPrefix("/").Handler(spa)
 	router.Handle("/api/", apiHandler)
 	router.Handle("/socket.io/", corsMiddleware(server))
-	router.PathPrefix("/").Handler(spa)
 	// router.Handle("/", vueHandler)
 	// router.NotFoundHandler = spa
 	// http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
