@@ -104,9 +104,14 @@ func loadConfig() *Config {
 	}
 	defer configFile.Close()
 
+	port := os.Getenv("PORT")
+	if len(port) == 0 {
+		port = "3000"
+	}
+
 	config := &Config{
-		Port: ":3000",
-		URL:  "http://localhost:8080",
+		Port: port,
+		URL:  "http://localhost:3000",
 	}
 	if err := json.NewDecoder(configFile).Decode(config); err != nil {
 		panic("parsing config: " + err.Error())
