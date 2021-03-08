@@ -1,6 +1,4 @@
 {
   "Name": "Chess-results viewer",
-  "Port": ":3000",
-  "URL": "http://localhost:3000",
   "DevURL": "http://localhost:8080"
 }
