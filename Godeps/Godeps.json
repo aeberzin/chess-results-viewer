@@ -1,0 +1,90 @@
+{
+	"ImportPath": "github.com/aeberzin/chess-results-viewer",
+	"GoVersion": "go1.12",
+	"GodepVersion": "v80",
+	"Deps": [
+		{
+			"ImportPath": "github.com/PuerkitoBio/goquery",
+			"Comment": "v1.5.1-9-gc942deb",
+			"Rev": "c942deb265ea836470983fdf25e1858304bb6896"
+		},
+		{
+			"ImportPath": "github.com/andybalholm/cascadia",
+			"Comment": "v1.2.0",
+			"Rev": "903109d295d56a99095f2cfab0c2ca8d4b22f648"
+		},
+		{
+			"ImportPath": "github.com/googollee/go-engine.io",
+			"Comment": "v1.4.2",
+			"Rev": "d1cac332336664ac940c0db96d83e9b181cd335c"
+		},
+		{
+			"ImportPath": "github.com/googollee/go-engine.io/base",
+			"Comment": "v1.4.2",
+			"Rev": "d1cac332336664ac940c0db96d83e9b181cd335c"
+		},
+		{
+			"ImportPath": "github.com/googollee/go-engine.io/packet",
+			"Comment": "v1.4.2",
+			"Rev": "d1cac332336664ac940c0db96d83e9b181cd335c"
+		},
+		{
+			"ImportPath": "github.com/googollee/go-engine.io/payload",
+			"Comment": "v1.4.2",
+			"Rev": "d1cac332336664ac940c0db96d83e9b181cd335c"
+		},
+		{
+			"ImportPath": "github.com/googollee/go-engine.io/transport",
+			"Comment": "v1.4.2",
+			"Rev": "d1cac332336664ac940c0db96d83e9b181cd335c"
+		},
+		{
+			"ImportPath": "github.com/googollee/go-engine.io/transport/polling",
+			"Comment": "v1.4.2",
+			"Rev": "d1cac332336664ac940c0db96d83e9b181cd335c"
+		},
+		{
+			"ImportPath": "github.com/googollee/go-engine.io/transport/websocket",
+			"Comment": "v1.4.2",
+			"Rev": "d1cac332336664ac940c0db96d83e9b181cd335c"
+		},
+		{
+			"ImportPath": "github.com/googollee/go-socket.io",
+			"Comment": "v1.4.2",
+			"Rev": "aa8a717234da5266c39e1211323266f397a3cb84"
+		},
+		{
+			"ImportPath": "github.com/googollee/go-socket.io/parser",
+			"Comment": "v1.4.2",
+			"Rev": "aa8a717234da5266c39e1211323266f397a3cb84"
+		},
+		{
+			"ImportPath": "github.com/gorilla/handlers",
+			"Comment": "v1.4.2-2-g597a9be",
+			"Rev": "597a9be2cbe9820827281afab3e5b09eb04447f2"
+		},
+		{
+			"ImportPath": "github.com/gorilla/mux",
+			"Comment": "v1.7.3-5-ge67b3c0",
+			"Rev": "e67b3c02c7195c052acff13261f0c9fd1ba53011"
+		},
+		{
+			"ImportPath": "github.com/gorilla/websocket",
+			"Comment": "v1.4.0-13-gae1634f",
+			"Rev": "ae1634f6a98965ded3b8789c626cb4e0bd78c3de"
+		},
+		{
+			"ImportPath": "github.com/rs/cors",
+			"Comment": "v1.7.0",
+			"Rev": "db0fe48135e83b5812a5a31be0eea66984b1b521"
+		},
+		{
+			"ImportPath": "golang.org/x/net/html",
+			"Rev": "5ee1b9f4859acd2e99987ef94ec7a58427c53bef"
+		},
+		{
+			"ImportPath": "golang.org/x/net/html/atom",
+			"Rev": "5ee1b9f4859acd2e99987ef94ec7a58427c53bef"
+		}
+	]
+}
