@@ -2,7 +2,7 @@ import Vue from 'vue';
 import axios from 'axios';
 
 const instance = axios.create({
-  baseURL: `${window.location.protocol}//${window.location.hostname}:3000/api`,
+  baseURL: `${window.location.protocol}//${window.location.hostname}/api`,
   timeout: 10000,
   headers: {
     'Content-Type': 'application/json',
