@@ -44,12 +44,9 @@ func (h spaHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// check whether a file exists at the given path
 	_, err = os.Stat(path)
 	if os.IsNotExist(err) {
-		// file does not exist, serve index.html
 		http.ServeFile(w, r, filepath.Join(h.staticPath, h.indexPath))
 		return
 	} else if err != nil {
-		// if we got an error (that wasn't that the file doesn't exist) stating the
-		// file, return a 500 internal server error and stop
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return
 	}
@@ -91,12 +88,16 @@ func main() {
 	// vueHandler := http.FileServer(Vue("web/dist/"))
 	apiHandler := api.NewAPI(router.PathPrefix("/api").Subrouter(), server)
 
-	spa := spaHandler{staticPath: "web/dist", indexPath: "web/dist/index.html"}
-	// router.Handle("/", vueHandler)
+	spa := spaHandler{staticPath: "web/dist", indexPath: "/index.html"}
 	router.Handle("/api/", apiHandler)
 	router.Handle("/socket.io/", corsMiddleware(server))
-	// router.PathPrefix("/dist").Handler(http.FileServer(http.Dir("web/dist/")))
 	router.PathPrefix("/").Handler(spa)
+	// router.Handle("/", vueHandler)
+	// router.NotFoundHandler = spa
+	// http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	//   http.ServeFile(w, r, "web/dist/index.html")
+	// })
+	// router.PathPrefix("/dist").Handler(http.FileServer(http.Dir("web/dist/")))
 
 	go func() {
 		scanner := bufio.NewScanner(os.Stdin)
