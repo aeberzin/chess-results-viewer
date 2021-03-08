@@ -111,7 +111,7 @@ func loadConfig() *Config {
 
 	config := &Config{
 		Port: port,
-		URL:  "http://localhost:3000",
+		URL:  "http://localhost:"+port,
 	}
 	if err := json.NewDecoder(configFile).Decode(config); err != nil {
 		panic("parsing config: " + err.Error())
