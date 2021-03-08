@@ -89,7 +89,7 @@ export default class Home extends Vue {
 
 
   created() {
-    this.io = io('localhost' + ':3000', {
+    this.io = io('http://chess-results-viewer.herokuapp.com', {
       // withCredentials: false,
     });
     this.io.on('SetRound', (data: any) => {
