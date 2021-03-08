@@ -9,6 +9,7 @@ type Player struct {
 	Name   string
 	Fide   string
 	Rating string
+	City   string
 }
 
 type Players struct {
@@ -18,10 +19,11 @@ type Players struct {
 func NewPlayers(table [][]string) *Players {
 	var players Players
 	players.config = map[string]string{
-		"Имя":      "Name",
-		"Ном.":     "Number",
-		"код FIDE": "Fide",
-		"Рейт.":    "Rating",
+		"Имя":        "Name",
+		"Ном.":       "Number",
+		"код FIDE":   "Fide",
+		"Рейт.":      "Rating",
+		"Клуб/Город": "City",
 	}
 	players.reflect = reflect.TypeOf(Player{})
 	players.setIndexes(table[0])

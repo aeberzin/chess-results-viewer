@@ -17,7 +17,7 @@ type API struct {
 }
 
 func NewAPI(subrouter *mux.Router, server *socketio.Server) *API {
-	tournament := NewTournament("536740")
+	tournament := NewTournament("548741")
 	socket := NewSocket(server, tournament)
 	api := &API{
 		"",
