@@ -90,7 +90,7 @@ export default class Home extends Vue {
 
   created() {
     this.io = io('localhost' + ':3000', {
-      withCredentials: false
+      // withCredentials: false,
     });
     this.io.on('SetRound', (data: any) => {
       this.round = parseInt(data.Round);

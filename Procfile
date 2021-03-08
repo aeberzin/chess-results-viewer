@@ -1,1 +1,1 @@
-web: chess-results-viewer
+web: bin/chess-results-viewer
