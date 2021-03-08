@@ -79,7 +79,7 @@ func main() {
 	handler := c.Handler(router)
 
 	log.Println("Listening on", os.Getenv("PORT"), "at", config.URL)
-	log.Fatal(http.ListenAndServe(os.Getenv("PORT"), handlers.LoggingHandler(os.Stdout, handler)))
+	log.Fatal(http.ListenAndServe(":" + os.Getenv("PORT"), handlers.LoggingHandler(os.Stdout, handler)))
 }
 
 type Config struct {
