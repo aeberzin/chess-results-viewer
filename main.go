@@ -78,8 +78,8 @@ func main() {
 
 	handler := c.Handler(router)
 
-	log.Println("Listening on", config.Port, "at", config.URL)
-	log.Fatal(http.ListenAndServe(config.Port, handlers.LoggingHandler(os.Stdout, handler)))
+	log.Println("Listening on", os.Getenv("PORT"), "at", config.URL)
+	log.Fatal(http.ListenAndServe(os.Getenv("PORT"), handlers.LoggingHandler(os.Stdout, handler)))
 }
 
 type Config struct {
@@ -111,7 +111,7 @@ func loadConfig() *Config {
 
 	config := &Config{
 		Port: port,
-		URL:  "http://localhost:"+port,
+		URL:  "http://localhost:" + port,
 	}
 	if err := json.NewDecoder(configFile).Decode(config); err != nil {
 		panic("parsing config: " + err.Error())
