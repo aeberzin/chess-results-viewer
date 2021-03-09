@@ -40,6 +40,8 @@ func (p *Pairs) setIndexes(row []string) {
 			color = "B"
 		case "Bo.":
 			p.indexes[i] = "Table"
+		case "Очки":
+			p.indexes[i] = color + "Res"
 		}
 	}
 	log.Println(p.indexes)

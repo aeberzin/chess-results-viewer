@@ -11,7 +11,10 @@
         />
         <div class="ml-6">
           <h2>Кубок ГРАН–ПРИ г. Екатеринбурга по быстрым шахматам 2021 год – Этап 1</h2>
-          <h2>{{ title }}</h2>
+          <h2>{{ title }} <span
+              class="red--text"
+              v-if="time"
+            >{{ timerText }} {{ time }}</span></h2>
         </div>
       </v-col>
       <v-spacer />
@@ -20,7 +23,7 @@
         cols="3"
       >
         <vue-qrcode
-          :value="url"
+          :value="`https://chess-results.com/Tnr${id}.aspx?lan=11`"
           :width="150"
         />
       </v-col>
@@ -39,10 +42,37 @@
       </div>
     </template>
     <template v-else-if="status == 2">
-
+      <finish-list :items="finishlist" />
     </template>
     <template v-else-if="status == 3">
       <start-list :items="startlist" />
+    </template>
+    <template v-else-if="status == 4">
+      <div class="welcome">
+        <v-carousel
+          cycle
+          hide-delimiter-background
+          hide-delimiters
+          :show-arrows="false"
+          interval="10000"
+          height="100%"
+        >
+          <v-carousel-item
+            v-for="(slide, i) in slides"
+            :key="i"
+            reverse-transition="fade-transition"
+            transition="fade-transition"
+          >
+            <v-sheet
+              height="100%"
+              color="white"
+              class="black--text d-flex align-center justify-center"
+            >
+              <div v-html="slide" />
+            </v-sheet>
+          </v-carousel-item>
+        </v-carousel>
+      </div>
     </template>
   </div>
 </template>
@@ -53,6 +83,7 @@ import io from 'socket.io-client';
 import Pairs from '@/components/Pairs.vue';
 import Competitors from '@/components/Competitors.vue';
 import StartList from '@/components/StartList.vue';
+import FinishList from '@/components/FinishList.vue';
 import VueQrcode from 'vue-qrcode';
 
 enum Status {
@@ -60,10 +91,11 @@ enum Status {
   InProgress = 1,
   Finished = 2,
   StartList = 3,
+  Info = 4
 }
 
 @Component({
-  components: { Pairs, Competitors, VueQrcode, StartList },
+  components: { Pairs, Competitors, VueQrcode, StartList, FinishList },
 })
 export default class Home extends Vue {
   private io: any;
@@ -73,23 +105,39 @@ export default class Home extends Vue {
   private competitors: any = [];
   private results: any = [];
   private startlist: any = [];
+  private finishlist: any = [];
+  private id: string = '';
 
-  private url: string = 'https://chess-results.com/Tnr551049.aspx?lan=11'
+  private timer: number = 0;
+  private timerText: string = '';
+  private timerInterval: any = null;
 
-  private status: Status = Status.NotStarted;
+  get time() {
+    function pad(number: any, length: any) {
+      var str = "" + number
+      while (str.length < length) {
+        str = '0' + str
+      }
+      return str
+    }
+    return this.timer === 0 ? null : (pad((this.timer - (this.timer % 60)) / 60, 2) + ':' + pad(this.timer % 60, 2));
+  }
+
+  private status: Status = Status.Info;
+  private slides: any = [];
 
   get title() {
     switch (this.status) {
       case Status.StartList: return 'Стартовый лист';
       case Status.InProgress: return this.round + ' тур';
       case Status.Finished: return 'Положение после ' + this.round + ' тура';
-      default: return 'Новая страница';
+      default: return '';
     }
   }
 
 
-  created() {
-    this.io = io('http://chess-results-viewer.herokuapp.com', {
+  async created() {
+    this.io = io('http://chess-results-viewer.herokuapp.com', <any>{
       // withCredentials: false,
     });
     this.io.on('SetRound', (data: any) => {
@@ -99,13 +147,60 @@ export default class Home extends Vue {
       this.status = Status.InProgress;
     });
     this.io.on('SetStartList', (data: any) => {
-      console.log(data);
       this.startlist = data.Items;
       this.status = Status.StartList;
-      // this.round = parseInt(data.Round);
-      // this.results = data.Players.Items;
-      // this.status = Status.Finished;
     });
+    this.io.on('SetResults', (data: any) => {
+      this.finishlist = data.Competitors.Items;
+      this.round = parseInt(data.Round);
+      this.status = Status.Finished;
+    });
+    this.io.on('SetTimer', (text: any, timer: any) => {
+      if (this.timerInterval) {
+        clearInterval(this.timerInterval);
+      }
+      this.timer = parseInt(timer) * 60;
+      this.timerText = text;
+      this.timerInterval = setInterval(() => {
+        this.timer--;
+        if (this.timer === 0) {
+          clearInterval(this.timerInterval);
+        }
+      }, 1000)
+    });
+    this.io.on('RemoveTimer', (data: any) => {
+      if (this.time) {
+        clearInterval(this.timerInterval);
+        this.timer = 0;
+      }
+    });
+    this.io.on('SetInfo', (data: any) => {
+      // console.log(data);
+      this.status = Status.Info;
+      // this.slides = data;
+      try {
+        this.slides = JSON.parse(data || "['']");
+      } catch (e) {
+
+      }
+    });
+
+    let tournament: any = await Vue.$http.get('info');
+    this.id = tournament.data.Tournament;
+    switch (tournament.data.Status) {
+      case 1:
+        await Vue.$http.post('round', { 'Round': tournament.data.Round });
+        break;
+      case 2:
+        await Vue.$http.post('results', { 'Round': tournament.data.Round });
+        break;
+      case 3:
+        await Vue.$http.post('tournament', { 'Tournament': tournament.data.Tournament });
+        break;
+      case 4:
+        await Vue.$http.post('info', { 'Info': tournament.data.Info || "['']" });
+        break;
+    }
   }
 }
 </script>
@@ -113,7 +208,7 @@ export default class Home extends Vue {
 <style lang="scss" scoped>
 .welcome {
   width: 100%;
-  height: 100%;
+  height: calc(100vh - 150px);
   display: flex;
   justify-content: center;
   align-items: center;

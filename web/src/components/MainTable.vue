@@ -1,7 +1,7 @@
 <template>
   <table
     class="table"
-    :class="{ pair: isPair }"
+    :class="{ pair: isPair, result: isResult }"
     :style="`font-size: ${fontSize}px; line-height: ${fontSize + 8}px;`"
   >
     <thead>
@@ -36,6 +36,7 @@ export default class MainTable extends Vue {
   @Prop({ required: true }) items!: any;
   @Prop({ required: false }) fontSize!: number;
   @Prop({ required: false }) isPair!: boolean;
+  @Prop({ required: false }) isResult!: boolean;
 }
 </script>
 
@@ -44,14 +45,34 @@ export default class MainTable extends Vue {
   width: 100%;
   height: 100%;
   display: grid;
-}
-.pair {
   grid-template-columns:
-    minmax(70px, 1fr)
-    minmax(150px, 6fr)
-    minmax(150px, 6fr);
+    minmax(30px, 1fr)
+    minmax(200px, 6fr)
+    minmax(80px, 1fr)
+    minmax(150px, 2fr)
+    minmax(110px, 2fr);
 
-  line-height: 28px !important;
+  &.pair {
+    grid-template-columns:
+      minmax(50px, 1fr)
+      minmax(150px, 6fr)
+      minmax(50px, 1fr)
+      minmax(50px, 1fr)
+      minmax(50px, 1fr)
+      minmax(150px, 6fr) !important;
+
+    line-height: 28px !important;
+  }
+
+  &.result {
+    grid-template-columns:
+      minmax(50px, 1fr)
+      minmax(50px, 1fr)
+      minmax(150px, 6fr)
+      minmax(50px, 1fr)
+      minmax(50px, 1fr)
+      minmax(50px, 1fr) !important;
+  }
 }
 
 thead,

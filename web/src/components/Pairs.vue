@@ -53,6 +53,18 @@ export default class Pairs extends Vue {
       title: "Белые"
     },
     {
+      name: "BRes",
+      title: "Очки"
+    },
+    {
+      name: "Result",
+      title: ' '
+    },
+    {
+      name: "WRes",
+      title: "Очки"
+    },
+    {
       name: "BName",
       title: "Черные"
     }

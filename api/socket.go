@@ -32,8 +32,8 @@ func (s *Socket) SendNewRound() {
 func (s *Socket) SendResults() {
 	competitors := s.tournament.GetResults()
 	broadcastInfo := struct {
-		competitors *Competitors
-		round       string
+		Competitors *Competitors
+		Round       string
 	}{
 		competitors,
 		s.tournament.round,
@@ -44,4 +44,16 @@ func (s *Socket) SendResults() {
 func (s *Socket) SendStartList() {
 	players := s.tournament.GetStartList()
 	s.server.BroadcastToRoom("all", "SetStartList", players)
+}
+
+func (s *Socket) SendRemoveTimer() {
+	s.server.BroadcastToRoom("all", "RemoveTimer", 1)
+}
+
+func (s *Socket) SendSetTimer(Text string, Timer string) {
+	s.server.BroadcastToRoom("all", "SetTimer", Text, Timer)
+}
+
+func (s *Socket) SendInfo() {
+	s.server.BroadcastToRoom("all", "SetInfo", s.tournament.info)
 }

@@ -4,8 +4,13 @@ import router from '@/router';
 import store from '@/store';
 import '@/plugins';
 import vuetify from '@/plugins/vuetify';
+import { TiptapVuetifyPlugin } from 'tiptap-vuetify';
 
 Vue.config.productionTip = false;
+Vue.use(TiptapVuetifyPlugin, {
+  vuetify: vuetify,
+  iconsGroup: 'mdi'
+})
 
 new Vue({
   router,

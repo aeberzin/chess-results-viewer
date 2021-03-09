@@ -6,7 +6,6 @@
         :items="table"
         :fontSize="fontSize"
         v-for="(table, i) in tables"
-        gridStr="minmax(30px, 1fr) minmax(200px, 6fr) minmax(80px, 1fr) minmax(150px, 2fr) minmax(110px, 2fr)"
         :key="`table${i}`"
       />
     </div>
