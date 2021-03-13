@@ -22,7 +22,7 @@ func NewPlayers(table [][]string) *Players {
 		"Имя":        "Name",
 		"Ном.":       "Number",
 		"код FIDE":   "Fide",
-		"Рейт.":      "Rating",
+		"Рейт.Межд.": "Rating",
 		"Клуб/Город": "City",
 	}
 	players.reflect = reflect.TypeOf(Player{})
