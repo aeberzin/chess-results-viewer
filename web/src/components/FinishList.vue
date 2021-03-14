@@ -70,15 +70,15 @@ export default class FinishList extends Vue {
       title: "Фамилия имя"
     },
     {
-      name: "Result",
+      name: "Rate1",
       title: "Очки"
     },
     {
-      name: "Rate1",
+      name: "Rate2",
       title: "К1"
     },
     {
-      name: "Rate2",
+      name: "Rate3",
       title: "К2"
     },
   ];
