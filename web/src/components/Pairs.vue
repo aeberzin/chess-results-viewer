@@ -45,9 +45,9 @@ export default class Pairs extends Vue {
   get tables() {
     let current = 0;
     return this.column.split(',').map((column: string) => {
-      this.pairs.slice(current, parseInt(column));
+      const result = this.pairs.slice(current, parseInt(column));
       current = parseInt(column);
-      console.log(current, column);
+      return result;
     });
     // return [this.pairs.slice(0, 28), this.pairs.slice(28, 57)]
   }
