@@ -43,8 +43,9 @@ export default class FinishList extends Vue {
   get tables() {
     let current = 0;
     return this.column.split(',').map((column: string) => {
-      this.items.slice(current, parseInt(column));
+      const result = this.items.slice(current, parseInt(column));
       current = parseInt(column);
+      return result;
     });
     // const items = this.items;//[...this.items, ...this.items];
     // if (items.length > 50 && items.length < 100) {

@@ -68,6 +68,14 @@
       @click="setInfo"
     >Установить</v-btn>
     <v-text-field
+      v-model="name"
+      label="Название"
+    >
+      <template #append-outer>
+        <button @click="setData">Установить</button>
+      </template>
+    </v-text-field>
+    <v-text-field
       v-model="pairsColumn"
       label="Колонки пар"
     >
@@ -116,6 +124,8 @@ export default class Dashboard extends Vue {
   private finishColumn: string = '';
   private lineHeight: string = '';
 
+  private name: string = '';
+
   private timer: any = {
     text: '',
     time: '',
@@ -139,6 +149,7 @@ export default class Dashboard extends Vue {
         pairsColumn: this.pairsColumn,
         finishColumn: this.finishColumn,
         lineHeight: this.lineHeight,
+        name: this.name,
       })
     });
     // this.status = "Информация";
@@ -175,6 +186,11 @@ export default class Dashboard extends Vue {
     this.currentTournament = tournament.data.Tournament;
     this.currentRound = tournament.data.Round;
     this.infoItems = JSON.parse(tournament.data.Info || "['']");
+    const data = JSON.parse(tournament.data.Data || "{}");
+    this.pairsColumn = data.pairsColumn || '';
+    this.lineHeight = data.lineHeight || '';
+    this.finishColumn = data.finishColumn || '';
+    this.name = data.name || '';
     switch (tournament.data.Status) {
       case 1: this.status = "Тур " + this.round; break;
       case 2: this.status = "Результаты после " + this.round + " тура"; break;

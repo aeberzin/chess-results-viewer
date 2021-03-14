@@ -10,7 +10,7 @@
           width="120"
         />
         <div class="ml-6">
-          <h2 style="width: 960px">Кубок ГРАН–ПРИ г. Екатеринбурга по быстрым шахматам 2021 год – Этап 1</h2>
+          <h2 style="width: 960px">{{ name }}</h2>
           <h2>{{ title }} <span
               class="red--text"
               v-if="time"
@@ -117,6 +117,7 @@ export default class Home extends Vue {
   private pairsColumn: string = '';
   private finishColumn: string = '';
   private lineHeight: string = '';
+  private name: string = '';
 
   get time() {
     function pad(number: any, length: any) {
@@ -196,6 +197,7 @@ export default class Home extends Vue {
     this.pairsColumn = data.pairsColumn || '28,57';
     this.finishColumn = data.finishColumn || '37,74,150';
     this.lineHeight = data.lineHeight || '25';
+    this.name = data.name || 'Кубок ГРАН–ПРИ г. Екатеринбурга по быстрым шахматам 2021 год – Этап 1';
     this.id = tournament.data.Tournament;
     switch (tournament.data.Status) {
       case 1:
