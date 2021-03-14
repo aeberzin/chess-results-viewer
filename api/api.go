@@ -28,7 +28,7 @@ type API struct {
 }
 
 func NewAPI(subrouter *mux.Router, server *socketio.Server) *API {
-	tournament := NewTournament("548741")
+	tournament := NewTournament("551049")
 	socket := NewSocket(server, tournament)
 	api := &API{
 		"",
@@ -73,11 +73,13 @@ func (api *API) handleGetInfo() http.HandlerFunc {
 			Tournament string
 			Status     Status
 			Info       string
+			Data       string
 		}{
 			api.Tournament.round,
 			api.Tournament.id,
 			api.Status,
 			api.Tournament.info,
+			api.Tournament.data,
 		}
 		res, _ := json.Marshal(result)
 		resp.Write(res)
@@ -85,6 +87,20 @@ func (api *API) handleGetInfo() http.HandlerFunc {
 }
 
 func (api *API) handleSetInfo() http.HandlerFunc {
+	return func(resp http.ResponseWriter, req *http.Request) {
+		var post struct {
+			Info string
+		}
+		_ = json.NewDecoder(req.Body).Decode(&post)
+
+		api.Tournament.SetInfo(post.Info)
+		api.Status = Info
+		api.socket.SendInfo()
+		resp.WriteHeader(http.StatusOK)
+	}
+}
+
+func (api *API) handleSetData() http.HandlerFunc {
 	return func(resp http.ResponseWriter, req *http.Request) {
 		var post struct {
 			Info string

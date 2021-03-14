@@ -36,16 +36,22 @@ import MainTable from '@/components/MainTable.vue';
 })
 export default class FinishList extends Vue {
   @Prop() private items: any;
+  @Prop({ required: false, default: ''}) private column: any;
 
   private fontSize: number = 12;
 
   get tables() {
-    const items = this.items;//[...this.items, ...this.items];
-    if (items.length > 50 && items.length < 100) {
-      return [items.slice(0, 40), items.slice(40)];
-    } else if (items.length > 100) {
-      return [items.slice(0, 37), items.slice(37, 74), items.slice(74)];
-    }
+    let current = 0;
+    return this.column.split(',').map((column: string) => {
+      this.items.slice(current, parseInt(column));
+      current = parseInt(column);
+    });
+    // const items = this.items;//[...this.items, ...this.items];
+    // if (items.length > 50 && items.length < 100) {
+    //   return [items.slice(0, 40), items.slice(40)];
+    // } else if (items.length > 100) {
+    //   return [items.slice(0, 37), items.slice(37, 74), items.slice(74)];
+    // }
   }
 
   private fields: any = [

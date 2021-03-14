@@ -10,10 +10,11 @@ type Tournament struct {
 	id    string
 	round string
 	info  string
+	data  string
 }
 
 func NewTournament(id string) *Tournament {
-	return &Tournament{id, "2", "['']"}
+	return &Tournament{id, "2", "['']", "{}"}
 }
 
 func (t *Tournament) SetID(id string) {
@@ -26,6 +27,10 @@ func (t *Tournament) SetRound(round string) {
 
 func (t *Tournament) SetInfo(info string) {
 	t.info = info
+}
+
+func (t *Tournament) SetData(info string) {
+	t.data = info
 }
 
 func (t *Tournament) GetPairs() *Pairs {

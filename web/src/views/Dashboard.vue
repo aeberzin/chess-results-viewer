@@ -67,6 +67,30 @@
       class="my-6 ml-2"
       @click="setInfo"
     >Установить</v-btn>
+    <v-text-field
+      v-model="pairsColumn"
+      label="Колонки пар"
+    >
+      <template #append-outer>
+        <button @click="setData">Установить</button>
+      </template>
+    </v-text-field>
+    <v-text-field
+      v-model="finishColumn"
+      label="Колонки положения"
+    >
+      <template #append-outer>
+        <button @click="setData">Установить</button>
+      </template>
+    </v-text-field>
+    <v-text-field
+      v-model="lineHeight"
+      label="Ширина строки"
+    >
+      <template #append-outer>
+        <button @click="setData">Установить</button>
+      </template>
+    </v-text-field>
   </v-container>
 </template>
 
@@ -88,6 +112,10 @@ export default class Dashboard extends Vue {
 
   private infoItems: any = [''];
 
+  private pairsColumn: string = '';
+  private finishColumn: string = '';
+  private lineHeight: string = '';
+
   private timer: any = {
     text: '',
     time: '',
@@ -104,6 +132,16 @@ export default class Dashboard extends Vue {
   async setInfo() {
     await Vue.$http.post('info', { 'Info': JSON.stringify(this.infoItems) });
     this.status = "Информация";
+  }
+
+  async setData() {
+    await Vue.$http.post('data', {      'Info': JSON.stringify({
+        pairsColumn: this.pairsColumn,
+        finishColumn: this.finishColumn,
+        lineHeight: this.lineHeight,
+      })
+    });
+    // this.status = "Информация";
   }
 
   async setRound() {

@@ -8,6 +8,7 @@
         v-for="(table, i) in tables"
         :isPair="true"
         :key="`table${i}`"
+        :lineHeight="lineHeight"
       />
     </div>
     <v-btn
@@ -36,11 +37,18 @@ import MainTable from '@/components/MainTable.vue';
 })
 export default class Pairs extends Vue {
   @Prop() private pairs: any;
+  @Prop({ required: false, default: '' }) private column: any;
+  @Prop({ required: false, default: '25' }) private lineHeight: any;
 
   private fontSize: number = 16;
 
   get tables() {
-    return [this.pairs.slice(0, 28), this.pairs.slice(28, 57)]
+    let current = 0;
+    return this.column.split(',').map((column: string) => {
+      this.pairs.slice(current, parseInt(column));
+      current = parseInt(column);
+    });
+    //return [this.pairs.slice(0, 28), this.pairs.slice(28, 57)]
   }
 
   private fields: any = [

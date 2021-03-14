@@ -32,6 +32,8 @@
       <pairs
         class="pairs"
         :pairs="pairs"
+        :column="pairsColumn"
+        :lineHeight="lineHeight"
       />
       <!-- <h2 class="competition">Положение после {{ round - 1 }} тура</h2> -->
       <!-- <competitors class="competitors" :competitors="competitors" /> -->
@@ -42,7 +44,7 @@
       </div>
     </template>
     <template v-else-if="status == 2">
-      <finish-list :items="finishlist" />
+      <finish-list :items="finishlist" :column="finishColumn" :lineHeight="lineHeight" />
     </template>
     <template v-else-if="status == 3">
       <start-list :items="startlist" />
@@ -111,6 +113,10 @@ export default class Home extends Vue {
   private timer: number = 0;
   private timerText: string = '';
   private timerInterval: any = null;
+
+  private pairsColumn: string = '';
+  private finishColumn: string = '';
+  private lineHeight: string = '';
 
   get time() {
     function pad(number: any, length: any) {
@@ -186,6 +192,10 @@ export default class Home extends Vue {
     });
 
     let tournament: any = await Vue.$http.get('info');
+    const data = JSON.parse(tournament.Data);
+    this.pairsColumn = data.pairsColumn || '28,57';
+    this.finishColumn = data.finishColumn || '37,74,150';
+    this.lineHeight = data.lineHeight || '25';
     this.id = tournament.data.Tournament;
     switch (tournament.data.Status) {
       case 1:

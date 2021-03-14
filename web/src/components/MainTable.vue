@@ -2,7 +2,7 @@
   <table
     class="table"
     :class="{ pair: isPair, result: isResult }"
-    :style="`font-size: ${fontSize}px; line-height: ${fontSize + 8}px;`"
+    :style="`font-size: ${fontSize}px; line-height: ${isPair ? lineHeight + 'px' : 'normal'} !important;`"
   >
     <thead>
       <tr>
@@ -37,6 +37,7 @@ export default class MainTable extends Vue {
   @Prop({ required: false }) fontSize!: number;
   @Prop({ required: false }) isPair!: boolean;
   @Prop({ required: false }) isResult!: boolean;
+  @Prop({ default: '25' }) lineHeight!: string;
 }
 </script>
 
@@ -60,8 +61,6 @@ export default class MainTable extends Vue {
       minmax(50px, 1fr)
       minmax(50px, 1fr)
       minmax(150px, 6fr) !important;
-
-    line-height: 25px !important;
   }
 
   &.result {
