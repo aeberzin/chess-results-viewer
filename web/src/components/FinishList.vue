@@ -44,7 +44,7 @@ export default class FinishList extends Vue {
     if (items.length > 50 && items.length < 100) {
       return [items.slice(0, 40), items.slice(40)];
     } else if (items.length > 100) {
-      return [items.slice(0, 40), items.slice(40, 80), items.slice(80)];
+      return [items.slice(0, 28), items.slice(28, 56), items.slice(56, 84), items.slice(84)];
     }
   }
 

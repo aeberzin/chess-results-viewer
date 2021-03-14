@@ -61,7 +61,7 @@ export default class MainTable extends Vue {
       minmax(50px, 1fr)
       minmax(150px, 6fr) !important;
 
-    line-height: 28px !important;
+    line-height: 25px !important;
   }
 
   &.result {
