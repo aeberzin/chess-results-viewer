@@ -192,7 +192,7 @@ export default class Home extends Vue {
     });
 
     let tournament: any = await Vue.$http.get('info');
-    const data = JSON.parse(tournament.Data);
+    const data = JSON.parse(tournament.data.Data);
     this.pairsColumn = data.pairsColumn || '28,57';
     this.finishColumn = data.finishColumn || '37,74,150';
     this.lineHeight = data.lineHeight || '25';
