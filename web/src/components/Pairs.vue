@@ -40,7 +40,7 @@ export default class Pairs extends Vue {
   private fontSize: number = 16;
 
   get tables() {
-    return [this.pairs.slice(0, 25), this.pairs.slice(25, 50)]
+    return [this.pairs.slice(0, 28), this.pairs.slice(28, 57)]
   }
 
   private fields: any = [
@@ -53,7 +53,7 @@ export default class Pairs extends Vue {
       title: "Белые"
     },
     {
-      name: "BRes",
+      name: "WRes",
       title: "Очки"
     },
     {
@@ -61,7 +61,7 @@ export default class Pairs extends Vue {
       title: ' '
     },
     {
-      name: "WRes",
+      name: "BRes",
       title: "Очки"
     },
     {
