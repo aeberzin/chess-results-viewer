@@ -107,8 +107,8 @@ func (api *API) handleSetData() http.HandlerFunc {
 		}
 		_ = json.NewDecoder(req.Body).Decode(&post)
 
-		api.Tournament.SetInfo(post.Info)
-		api.Status = Info
+		api.Tournament.SetData(post.Info)
+		// api.Status = Info
 		api.socket.SendInfo()
 		resp.WriteHeader(http.StatusOK)
 	}
