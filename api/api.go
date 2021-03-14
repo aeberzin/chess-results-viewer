@@ -39,6 +39,7 @@ func NewAPI(subrouter *mux.Router, server *socketio.Server) *API {
 	}
 	api.HandleFunc("/info", api.handleGetInfo()).Methods(http.MethodGet)
 	api.HandleFunc("/info", api.handleSetInfo()).Methods(http.MethodPost)
+	api.HandleFunc("/data", api.handleSetData()).Methods(http.MethodPost)
 	api.HandleFunc("/pairs", api.handleGetPairs()).Methods(http.MethodGet)
 	api.HandleFunc("/competitors", api.handleGetCompetitors()).Methods(http.MethodGet)
 	api.HandleFunc("/round", api.handleSetRound()).Methods(http.MethodPost)
@@ -109,7 +110,7 @@ func (api *API) handleSetData() http.HandlerFunc {
 
 		api.Tournament.SetData(post.Info)
 		// api.Status = Info
-		api.socket.SendInfo()
+		// api.socket.SendInfo()
 		resp.WriteHeader(http.StatusOK)
 	}
 }
