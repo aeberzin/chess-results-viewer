@@ -86,7 +86,7 @@ td {
   white-space: nowrap;
   align-items: center;
   display: flex;
-  padding-left: 10px !important;
+  padding-left: 20px !important;
 }
 th {
   position: sticky;
